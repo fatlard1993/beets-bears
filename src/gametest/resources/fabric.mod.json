@@ -1,0 +1,18 @@
+{
+	"schemaVersion": 1,
+	"id": "beets-bears-gametest",
+	"version": "1.0.0",
+	"name": "Beets & Bears smoke test",
+	"description": "Loads the mod, joins a world, and fails if anything on the way threw.",
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-client-gametest": [
+			"justfatlard.beets_bears.gametest.SmokeTest"
+		]
+	},
+	"depends": {
+		"beets-bears-justfatlard": "*",
+		"fabric-client-gametest-api-v1": "*"
+	}
+}

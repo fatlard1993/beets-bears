@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "beets-bears-justfatlard",
+	"version": "${version}",
+	"name": "Beets & Bears",
+	"description": "Black bears in the woods and brown bears in the conifers, both built from the polar bear the game already has. Tame any of the three with honey or a beetroot.",
+	"authors": [
+		"justfatlard"
+	],
+	"contact": {
+		"homepage": "https://github.com/fatlard1993/beets-bears",
+		"sources": "https://github.com/fatlard1993/beets-bears",
+		"issues": "https://github.com/fatlard1993/beets-bears/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/beets-bears-justfatlard/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"justfatlard.beets_bears.Main"
+		]
+	},
+	"mixins": [
+		"beets-bears-justfatlard.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=${loaderVersion}",
+		"minecraft": "${minecraftDependency}",
+		"java": ">=25",
+		"pandorical": ">=15.0.0",
+		"fabric-api": "${fabricApiVersion}"
+	},
+	"suggests": {
+		"better-companions-justfatlard": "*",
+		"lets-cook-justfatlard": "*",
+		"block-tip": "*"
+	}
+}

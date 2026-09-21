@@ -1,0 +1,18 @@
+{
+  "parent": "minecraft:husbandry/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:beetroot"
+    },
+    "title": "Bears. Beets. Battlestar Galactica.",
+    "description": "Hand a beetroot to a bear",
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "handed_it_over": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
