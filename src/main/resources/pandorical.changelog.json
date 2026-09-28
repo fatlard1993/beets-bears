@@ -3,6 +3,9 @@
 		"Black bears in the woods and brown bears in the conifers, built out of the polar bear the game already has. Hold out honey or a beetroot and a bear stops meaning you harm."
 	],
 	"versions": {
+		"1.0.1": [
+			"A mod menu icon of a bear's face and the beetroot that wins it over."
+		],
 		"1.0.0": [
 			"Three bears where the game had one: black in forests and jungles, brown in taigas and groves.",
 			"The polar bear is left exactly as it was.",
