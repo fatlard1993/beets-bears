@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "beets-bears-gametest",
 	"version": "1.0.0",
-	"name": "Beets & Bears smoke test",
+	"name": "Beets Bears smoke test",
 	"description": "Loads the mod, joins a world, and fails if anything on the way threw.",
 	"license": "MIT",
 	"environment": "*",

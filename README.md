@@ -1,4 +1,4 @@
-# Beets & Bears
+# Beets Bears
 
 Black bears in the woods and brown bears in the conifers, built out of the polar bear the game already has. Hold out honey or a beetroot and a bear will stop meaning you harm.
 

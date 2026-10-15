@@ -2,7 +2,7 @@
 	"schemaVersion": 1,
 	"id": "beets-bears-justfatlard",
 	"version": "${version}",
-	"name": "Beets & Bears",
+	"name": "Beets Bears",
 	"description": "Black bears in the woods and brown bears in the conifers, both built from the polar bear the game already has. Tame any of the three with honey or a beetroot.",
 	"authors": [
 		"justfatlard"

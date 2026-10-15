@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate Beets & Bears' mod menu icon: a bear's face, and the beetroot that wins it over.
+"""Generate Beets Bears' mod menu icon: a bear's face, and the beetroot that wins it over.
 
 The face is cut from the mod's own brown bear texture. It is inset on forest green rather
 than filled to the edges: a head cropped flush is a brown square at listing size, and the
