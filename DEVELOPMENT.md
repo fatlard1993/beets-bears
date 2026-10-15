@@ -26,8 +26,8 @@ python3 generate_textures.py
 python3 generate_icon.py
 ```
 
-`generate_textures.py` reads the vanilla polar bear sheet straight out of the
-Loom cache and recolours it against luminance, so the shading, seams, eyes and
+`generate_textures.py` reads the vanilla polar bear and polar bear cub sheets
+straight out of the Loom cache and recolours each against luminance, so the shading, seams, eyes and
 nose all land where the model expects them. Pixels darker than the coat are left
 alone, which is what keeps the face a face.
 
@@ -46,3 +46,6 @@ Nothing here is covered by a test, and three things are only true at runtime:
   `/summon polar_bear` in a forest should produce a smaller black one.
 - **A bear reloads dressed.** Coats live in memory on the client, so the test
   that matters is leaving the area and coming back.
+- **A cub is dressed as a cub.** `/summon polar_bear ~ ~ ~ {Age:-24000}` in a
+  forest: a small black cub, not a smear. Wait it out and it changes coat as it
+  grows.

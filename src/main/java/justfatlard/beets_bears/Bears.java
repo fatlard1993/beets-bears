@@ -37,25 +37,28 @@ public final class Bears {
 	/**
 	 * @param tag     what the animal wears to say which bear it is
 	 * @param scale   against a polar bear, which is 1
-	 * @param texture the coat, drawn over the polar bear's own
+	 * The coat is drawn over the polar bear's own, from a sheet named for the tag: a cub has a model
+	 * of its own that lays its texture out differently, so it wears a cub sheet and not the adult's.
 	 */
 	public enum Kind {
-		BLACK("black_bear", 0.8F, "textures/entity/black_bear.png"),
-		BROWN("brown_bear", 1.25F, "textures/entity/brown_bear.png");
+		BLACK("black_bear", 0.8F),
+		BROWN("brown_bear", 1.25F);
 
 		private final String tag;
 		private final float scale;
 		private final Identifier texture;
+		private final Identifier cubTexture;
 
-		Kind(String tag, float scale, String texture) {
+		Kind(String tag, float scale) {
 			this.tag = tag;
 			this.scale = scale;
-			this.texture = Identifier.fromNamespaceAndPath(Main.MOD_ID, texture);
+			this.texture = Identifier.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/" + tag + ".png");
+			this.cubTexture = Identifier.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/" + tag + "_cub.png");
 		}
 
 		public String tag() { return tag; }
 		public float scale() { return scale; }
-		public Identifier texture() { return texture; }
+		public Identifier texture(boolean cub) { return cub ? cubTexture : texture; }
 	}
 
 	/**
@@ -140,11 +143,12 @@ public final class Bears {
 	 *
 	 * <p>The size is saved with the animal and the coat is not: Pandorical holds overlays in memory
 	 * and drops them when an entity unloads, so this is the half that has to be said again. Cheap
-	 * enough to say for every bear that loads rather than tracking which ones have been told.
+	 * enough to say for every bear that loads rather than tracking which ones have been told. Said
+	 * again when a cub grows up, too, because the grown bear is drawn with a different model.
 	 */
-	public static void dress(Entity entity) {
-		Kind kind = of(entity);
+	public static void dress(PolarBear bear) {
+		Kind kind = of(bear);
 		if (kind == null) return;
-		PandoricalApi.entityOverlays().set(entity, kind.texture());
+		PandoricalApi.entityOverlays().set(bear, kind.texture(bear.isBaby()));
 	}
 }

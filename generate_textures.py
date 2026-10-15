@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The two coats, recoloured from the polar bear's own texture.
+The two coats, adult and cub, recoloured from the polar bear's own two textures.
 
 Drawn from vanilla rather than painted fresh so every patch lands exactly where the polar bear
 model expects it: the eyes, the nose, the pads and the seams are already in the right pixels, and
@@ -16,7 +16,12 @@ from pathlib import Path
 from PIL import Image
 
 CLIENT_JAR = Path.home() / ".gradle/caches/fabric-loom/26.3/minecraft-client-only.jar"
-SOURCE = "assets/minecraft/textures/entity/bear/polarbear.png"
+# A cub is drawn with its own model, which lays its texture out on a different sheet: the adult's
+# coat on a cub lands on the wrong boxes. So each coat is made twice, once from each sheet.
+SOURCES = {
+    "": "assets/minecraft/textures/entity/bear/polarbear.png",
+    "_cub": "assets/minecraft/textures/entity/bear/polarbear_baby.png",
+}
 OUT = Path(__file__).parent / "src/main/resources/assets/beets-bears-justfatlard/textures/entity"
 
 # Darkest and lightest the coat gets. The polar bear's own range is nearly white throughout, so
@@ -59,14 +64,16 @@ def recolour(source: Image.Image, dark, light) -> Image.Image:
 
 def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(CLIENT_JAR) as jar, jar.open(SOURCE) as handle:
-        polar = Image.open(handle).convert("RGBA")
-        polar.load()
+    with zipfile.ZipFile(CLIENT_JAR) as jar:
+        for suffix, source in SOURCES.items():
+            with jar.open(source) as handle:
+                polar = Image.open(handle).convert("RGBA")
+                polar.load()
 
-    for name, (dark, light) in COATS.items():
-        path = OUT / f"{name}.png"
-        recolour(polar, dark, light).save(path)
-        print(f"{path.relative_to(Path(__file__).parent)}  {polar.width}x{polar.height}")
+            for name, (dark, light) in COATS.items():
+                path = OUT / f"{name}{suffix}.png"
+                recolour(polar, dark, light).save(path)
+                print(f"{path.relative_to(Path(__file__).parent)}  {polar.width}x{polar.height}")
 
 
 if __name__ == "__main__":

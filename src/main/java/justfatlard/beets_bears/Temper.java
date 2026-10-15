@@ -45,32 +45,30 @@ public final class Temper {
 	}
 
 	/**
-	 * Give a black bear its nerves, once, as it loads.
+	 * Give a black bear its nerves, as it loads and as it stops being quiet.
 	 *
 	 * <p>Only an added goal, never a removed one: adding is safe against a version that has
-	 * rearranged what a polar bear does, and this runs on every load, so it has to be harmless to
-	 * do twice. A goal added twice is ticked twice and flees the same direction, which is why the
-	 * tag is checked rather than the goal list.
+	 * rearranged what a polar bear does. Goals are not saved with the animal, so this has to run on
+	 * every load, and has to be harmless to run twice: a goal added twice is ticked twice. So it looks
+	 * for its own goal on the bear rather than remembering, because anything remembered on the bear
+	 * is saved with it and outlives the goal it was remembering.
 	 */
 	public static void settle(PolarBear bear) {
-		if (Bears.of(bear) != Bears.Kind.BLACK) return;
-		if (!bear.addTag(SETTLED_TAG)) return;
-		bear.getGoalSelector().addGoal(2,
-			new AvoidEntityGoal<>(bear, Player.class, SHY_DISTANCE, 1.0, 1.3));
+		if (Bears.of(bear) != Bears.Kind.BLACK || isCalm(bear)) return;
+		if (bear.getGoalSelector().getAvailableGoals().stream()
+			.anyMatch(wrapped -> wrapped.getGoal() instanceof Shy)) return;
+		bear.getGoalSelector().addGoal(2, new Shy(bear));
 	}
-
-	/**
-	 * Marks a bear whose nerves are already installed.
-	 *
-	 * <p>Rides on the entity rather than a set held here because the alternative is a set of every
-	 * bear the server has ever loaded, which never shrinks, and because a bear reloading must not
-	 * collect a second copy of the goal.
-	 */
-	private static final String SETTLED_TAG = "shy_installed";
 
 	/** Dropped when a black bear is quieted, so an owner's bear is not also fleeing from them. */
 	public static void unsettle(PolarBear bear) {
-		bear.removeTag(SETTLED_TAG);
-		bear.getGoalSelector().removeAllGoals(goal -> goal instanceof AvoidEntityGoal<?>);
+		bear.getGoalSelector().removeAllGoals(goal -> goal instanceof Shy);
+	}
+
+	/** Its own class, so it can be told apart from any other avoiding a polar bear ever does. */
+	private static final class Shy extends AvoidEntityGoal<Player> {
+		Shy(PolarBear bear) {
+			super(bear, Player.class, SHY_DISTANCE, 1.0, 1.3);
+		}
 	}
 }
