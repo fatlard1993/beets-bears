@@ -80,8 +80,6 @@ public final class Calming {
 		bear.setTarget(null);
 		bear.setPersistentAngerTarget(null);
 		bear.setPersistentAngerEndTime(0L);
-		// A black bear that has taken food from you has no business running away from you next.
-		Temper.unsettle(bear);
 
 		level.sendParticles(ParticleTypes.HEART, bear.getX(), bear.getY() + bear.getBbHeight(),
 			bear.getZ(), 5, 0.4, 0.3, 0.4, 0.0);
@@ -91,7 +89,6 @@ public final class Calming {
 
 	/** A bear you hit is not a bear you have quieted. */
 	public static void provoked(PolarBear bear) {
-		if (!bear.removeTag(Temper.CALM_TAG)) return;
-		Temper.settle(bear);
+		bear.removeTag(Temper.CALM_TAG);
 	}
 }

@@ -10,9 +10,10 @@ import net.minecraft.world.item.Items;
  * What a bear is worth killing for.
  *
  * <p>Only when Let's Cook is absent. That mod already butchers a polar bear properly - a lean cut
- * with some fat on it, sized by looting, cooked if the animal burned - and all three bears here are
- * polar bears, so its work covers them without being asked. Two mods both deciding what a bear
- * drops would mean twice the meat and no way to tell which half came from where.
+ * with some fat on it, sized by looting, cooked if the animal burned - and the black and brown
+ * bears' own loot tables are nothing but the polar bear's, so whatever Let's Cook makes of a polar
+ * bear it makes of them too, without being asked. Two mods both deciding what a bear drops would
+ * mean twice the meat and no way to tell which half came from where.
  *
  * <p>Without it, vanilla gives a bear nothing but the fish in its stomach, which makes a forest bear
  * a fight with no reason to take it. So this puts meat on the animal, and only as much as the animal

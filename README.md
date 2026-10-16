@@ -18,17 +18,19 @@ Server-side; Pandorical carries the client's half.
 
 Size is not only for the look of it: a bear's health goes with its size, so the brown bear that looks harder to kill is harder to kill, and the black bear that looks slighter is slighter.
 
-**Where a bear is born decides what it is.** A polar bear that wanders south into a forest is a polar bear a long way from home, not a black bear, and a black bear that wanders onto the ice stays a black bear. Cubs are whatever their parent was, wherever they are born.
+**A bear is what it was born.** A polar bear that wanders south into a forest is a polar bear a long way from home, not a black bear, and a black bear that wanders onto the ice stays a black bear. Cubs are whatever their parents were, wherever they are born, and a black bear and a brown bear will not breed with each other.
 
-## None Of Them Is A New Animal
+## Two New Animals, On The Polar Bear's Bones
 
-All three are `minecraft:polar_bear`. A server-side mod cannot hand a vanilla client a new creature to draw, so a genuinely new bear would be an invisible one for anybody not running the mod themselves. What a client *can* be told is that a familiar animal is a different size and wearing a different coat, and that is what this does: the bears are resized through the game's own scale attribute and recoloured through Pandorical's entity overlay.
+The black bear and the brown bear are animals of their own, `beets-bears-justfatlard:black_bear` and `beets-bears-justfatlard:brown_bear`, and underneath each one is the polar bear's own code. They stand on their hind legs, swim, panic in fire and raise cubs exactly as polar bears do, because that is the code they run. What they add is their size, their coat and their temper.
 
-Everything that follows from that is deliberate. They stand on their hind legs, swim, breed, panic in fire and raise cubs exactly as polar bears, because they are polar bears. A command that looks for polar bears finds them. Anything that changes what a polar bear drops changes what they drop.
+A client with Pandorical draws each one as a polar bear wearing the bear's own coat, with a cub's coat for a cub. A client without it is shown a plain polar bear in its place, at the right size, because the size is the game's own scale attribute and every client reads that.
 
-**One egg, and the animal is just a Bear.** The spawn egg now hatches whichever bear the place calls for, so "Polar Bear Spawn Egg" was wrong two times out of three; it reads **Bear Spawn Egg**, and the animal itself is introduced as a **Bear** wherever the game says its name, death messages included. The precise word comes back on the block-tip card, which is where a player is actually asking which bear this is.
+A command that looks for polar bears no longer finds them; ask for the bear by its own name. Anything that changes what a polar bear drops still changes what they drop, because each bear's loot is the polar bear's loot.
 
-Which bear an animal is, is written on the animal as a scoreboard tag - `black_bear` or `brown_bear`. Tags are saved with the entity by the game itself, survive this mod being removed, and can be read or set with `/tag` when something needs fixing by hand.
+**An egg each.** The creative spawn egg tab has a **Black Bear Spawn Egg** and a **Brown Bear Spawn Egg**, and the Polar Bear Spawn Egg is the polar bear's again. Used on a grown bear, an egg hatches a cub of that bear, the way every spawn egg in the game does. The animals are introduced by their own names wherever the game says one, and a death message reads *Black Bear* or *Brown Bear* even on a client that has never heard of this mod.
+
+**Bears from an older world come along.** Before this, a black or brown bear was a polar bear wearing a `black_bear` or `brown_bear` tag. The first time one of those loads, it comes back as the bear it was meant to be: same spot, same health, same age, same name, still settled if you had settled it, still yours if it was yours.
 
 ## Honey, Or A Beetroot
 
@@ -48,13 +50,11 @@ Without better-companions there is no taming here at all. This mod quiets bears;
 
 ## Looking At One
 
-With [block-tip](https://github.com/fatlard1993/block-tip) installed, the card names the bear in front of you properly - **Black Bear**, **Brown Bear** or **Polar Bear** - rather than the Polar Bear all three are underneath. It also says what to do about it: a wild one reads *Honey or a beetroot to settle*, and one you have already settled reads *Settled*.
-
-The card is the only place the three are named apart, and deliberately so. The alternative is giving each bear a custom name, which fixes the card and then hangs the word in the air over the animal - and a wild bear with its name floating above it is somebody's pet.
+With [block-tip](https://github.com/fatlard1993/block-tip) installed, the card says what to do about the bear in front of you: a wild one reads *Honey or a beetroot to settle*, and one you have already settled reads *Settled*. It names the bear by itself, since each is its own animal with its own name, and credits this mod for the black and the brown.
 
 ## Meat
 
-**With [lets-cook](https://github.com/fatlard1993/lets-cook) installed, this mod stays out of it.** That mod already butchers a polar bear properly - a lean cut with fat on it, sized by Looting, cooked if the animal burned - and since all three bears are polar bears, its work covers them without being asked.
+**With [lets-cook](https://github.com/fatlard1993/lets-cook) installed, this mod stays out of it.** That mod already butchers a polar bear properly: a lean cut with fat on it, sized by Looting, cooked if the animal burned. The black and brown bears drop whatever a polar bear drops, so its work covers them without being asked.
 
 **Without it, a bear drops beef**, because vanilla gives a polar bear nothing but the fish in its stomach and a forest full of bears you have no reason to hunt is a strange thing to add. A black bear gives one or two, a brown bear two or three. Cubs drop nothing.
 
@@ -64,13 +64,13 @@ Only one of the two mods is ever the one deciding, so there is no install where 
 
 Bears are rarer than the animals you farm and rarer than wolves, and come alone or in pairs. They are added to the biomes above and nothing is taken away, so every animal that lived in those woods before still does.
 
-A polar bear's spawn rule only insists on ice and snow inside the biomes tagged for it. Everywhere else it falls back to the ordinary animal rule - grass, and daylight - so no override was needed to put one in a forest.
+They spawn by the ordinary animal rule, grass and daylight, which is the same rule a polar bear falls back on anywhere outside the ice. Polar bear spawns are left exactly as they were.
 
 ## Pandorical
 
-Pandorical is required on the server; the mod will not load without it. The two coats are sent to Pandorical clients as entity overlays.
+Pandorical is required on the server; the mod will not load without it. It is what tells a client to draw each new bear as a polar bear wearing that bear's coat, and what sends a polar bear in its place to a client that cannot draw it.
 
-**Without Pandorical client-side**, a player still meets the bears, and they are still the right size, the right temper and carry the right drops - they are simply all white, because the client was never handed the coat. Nothing breaks; the bears are just harder to tell apart.
+**Without Pandorical client-side**, a player still meets the bears, and they are still the right size, the right temper, carry the right drops and go by the right names. They are simply all white, because the client was never handed the coat. Nothing breaks; the bears are just harder to tell apart.
 
 ## Development
 

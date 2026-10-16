@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-The two coats, adult and cub, recoloured from the polar bear's own two textures.
+The two coats, adult and cub, and the two spawn eggs, recoloured from the polar bear's own textures.
 
 Drawn from vanilla rather than painted fresh so every patch lands exactly where the polar bear
 model expects it: the eyes, the nose, the pads and the seams are already in the right pixels, and
@@ -23,6 +23,11 @@ SOURCES = {
     "_cub": "assets/minecraft/textures/entity/bear/polarbear_baby.png",
 }
 OUT = Path(__file__).parent / "src/main/resources/assets/beets-bears-justfatlard/textures/entity"
+
+# Each bear has an egg of its own, painted the same way from the polar bear's: the spots and the
+# outline stay where the game drew them, and the shell takes the coat's colours.
+EGG_SOURCE = "assets/minecraft/textures/item/polar_bear_spawn_egg.png"
+EGG_OUT = Path(__file__).parent / "src/main/resources/assets/beets-bears-justfatlard/textures/item"
 
 # Darkest and lightest the coat gets. The polar bear's own range is nearly white throughout, so
 # each coat is really a ramp picked here and the vanilla texture only says where along it to sit.
@@ -74,6 +79,15 @@ def main() -> None:
                 path = OUT / f"{name}{suffix}.png"
                 recolour(polar, dark, light).save(path)
                 print(f"{path.relative_to(Path(__file__).parent)}  {polar.width}x{polar.height}")
+
+        EGG_OUT.mkdir(parents=True, exist_ok=True)
+        with jar.open(EGG_SOURCE) as handle:
+            egg = Image.open(handle).convert("RGBA")
+            egg.load()
+        for name, (dark, light) in COATS.items():
+            path = EGG_OUT / f"{name}_spawn_egg.png"
+            recolour(egg, dark, light).save(path)
+            print(f"{path.relative_to(Path(__file__).parent)}  {egg.width}x{egg.height}")
 
 
 if __name__ == "__main__":

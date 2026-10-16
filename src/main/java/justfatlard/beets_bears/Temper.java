@@ -45,30 +45,34 @@ public final class Temper {
 	}
 
 	/**
-	 * Give a black bear its nerves, as it loads and as it stops being quiet.
+	 * Give a black bear its nerves, once, as it is built.
 	 *
 	 * <p>Only an added goal, never a removed one: adding is safe against a version that has
-	 * rearranged what a polar bear does. Goals are not saved with the animal, so this has to run on
-	 * every load, and has to be harmless to run twice: a goal added twice is ticked twice. So it looks
-	 * for its own goal on the bear rather than remembering, because anything remembered on the bear
-	 * is saved with it and outlives the goal it was remembering.
+	 * rearranged what a polar bear does. A quieted bear keeps the goal and the goal declines to run,
+	 * so quieting a bear and then hitting it needs nothing taken off it or put back.
 	 */
-	public static void settle(PolarBear bear) {
-		if (Bears.of(bear) != Bears.Kind.BLACK || isCalm(bear)) return;
-		if (bear.getGoalSelector().getAvailableGoals().stream()
-			.anyMatch(wrapped -> wrapped.getGoal() instanceof Shy)) return;
+	public static void makeShy(PolarBear bear) {
 		bear.getGoalSelector().addGoal(2, new Shy(bear));
 	}
 
-	/** Dropped when a black bear is quieted, so an owner's bear is not also fleeing from them. */
-	public static void unsettle(PolarBear bear) {
-		bear.getGoalSelector().removeAllGoals(goal -> goal instanceof Shy);
-	}
-
 	/** Its own class, so it can be told apart from any other avoiding a polar bear ever does. */
-	private static final class Shy extends AvoidEntityGoal<Player> {
+	public static final class Shy extends AvoidEntityGoal<Player> {
+		private final PolarBear bear;
+
 		Shy(PolarBear bear) {
 			super(bear, Player.class, SHY_DISTANCE, 1.0, 1.3);
+			this.bear = bear;
+		}
+
+		/** A black bear that has taken food from you has no business running away from you next. */
+		@Override
+		public boolean canUse() {
+			return !isCalm(bear) && super.canUse();
+		}
+
+		@Override
+		public boolean canContinueToUse() {
+			return !isCalm(bear) && super.canContinueToUse();
 		}
 	}
 }

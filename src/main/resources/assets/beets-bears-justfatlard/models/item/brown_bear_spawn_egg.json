@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "beets-bears-justfatlard:item/brown_bear_spawn_egg"
+  }
+}

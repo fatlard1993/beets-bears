@@ -2,13 +2,14 @@
 	"schemaVersion": 1,
 	"id": "beets-bears-gametest",
 	"version": "1.0.0",
-	"name": "Beets Bears smoke test",
-	"description": "Loads the mod, joins a world, and fails if anything on the way threw.",
+	"name": "Beets Bears tests",
+	"description": "Loads the mod and joins a world, then holds both bears to what the readme says, and brings a 1.0.x bear back from its save.",
 	"license": "MIT",
 	"environment": "*",
 	"entrypoints": {
 		"fabric-client-gametest": [
-			"justfatlard.beets_bears.gametest.SmokeTest"
+			"justfatlard.beets_bears.gametest.SmokeTest",
+			"justfatlard.beets_bears.gametest.BearsAreTheirOwnAnimals"
 		]
 	},
 	"depends": {

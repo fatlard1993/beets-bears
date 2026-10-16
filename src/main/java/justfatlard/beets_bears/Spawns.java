@@ -2,19 +2,13 @@ package justfatlard.beets_bears;
 
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 
 /**
- * Putting bears in the woods.
+ * Putting bears in the woods: black bears in woodland, brown bears in conifer forest.
  *
- * <p>Nothing here says "black bear" or "brown bear": it adds polar bear spawns to woodland and to
- * conifer forest, and {@link Bears#wildIn} decides what the animal that arrives turns out to be.
- * One rule, read in one place, rather than a spawn table and a naming table that can disagree.
- *
- * <p>The game needs no persuading to allow this. A polar bear's spawn rule only insists on ice and
- * snow inside the biomes tagged for it; everywhere else it falls back to the ordinary animal rule,
- * which is grass and daylight - so a forest already qualifies.
+ * <p>Added on top of what lives there, never in place of it, and the polar bear's own spawns are
+ * left exactly as the game has them.
  */
 public final class Spawns {
 	private Spawns() {}
@@ -31,10 +25,10 @@ public final class Spawns {
 	public static void register() {
 		BiomeModifications.addSpawn(
 			BiomeSelectors.includeByKey(Bears.blackBiomes()),
-			MobCategory.CREATURE, EntityTypes.POLAR_BEAR, BLACK_WEIGHT, MIN_GROUP, MAX_GROUP);
+			MobCategory.CREATURE, Bears.BLACK_BEAR, BLACK_WEIGHT, MIN_GROUP, MAX_GROUP);
 
 		BiomeModifications.addSpawn(
 			BiomeSelectors.includeByKey(Bears.brownBiomes()),
-			MobCategory.CREATURE, EntityTypes.POLAR_BEAR, BROWN_WEIGHT, MIN_GROUP, MAX_GROUP);
+			MobCategory.CREATURE, Bears.BROWN_BEAR, BROWN_WEIGHT, MIN_GROUP, MAX_GROUP);
 	}
 }

@@ -4,9 +4,7 @@
 	"package": "justfatlard.beets_bears.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
-		"BearBreedingMixin",
-		"BearGrowsUpMixin",
-		"BearSpawnMixin",
+		"LegacyBearMixin",
 		"MobTargetMixin"
 	],
 	"injectors": {

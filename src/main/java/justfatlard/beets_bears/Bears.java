@@ -3,62 +3,147 @@ package justfatlard.beets_bears;
 import java.util.List;
 import java.util.Set;
 
+import justfatlard.pandorical.api.EntityRegistration;
+import justfatlard.pandorical.api.ItemRegistration;
 import justfatlard.pandorical.api.PandoricalApi;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityType;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.animal.polarbear.PolarBear;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.levelgen.Heightmap;
 import org.jspecify.annotations.Nullable;
 
 /**
- * The three bears, and which one a given animal is.
+ * The two new bears as the game knows them: their entity types, their spawn eggs, and how
+ * Pandorical draws them.
  *
- * <p>All three are {@link PolarBear}. The game will not let a server-side mod hand a client a new
- * entity to draw, so a new bear would be an invisible one on every vanilla client; what it will do
- * is let an existing entity be a different size and wear a different skin. So a black bear is a
- * polar bear at four-fifths the size with a black coat painted over it, and it hunts, sleeps,
- * breeds and stands up on its hind legs exactly as the bear the game already knows how to draw.
- *
- * <p>Which bear an animal is, is written on it as a tag rather than held in a table here. Tags ride
- * along in the entity's own save data with no work from us, survive this mod being removed, and can
- * be read and set from a command when something has gone wrong, which a private map cannot.
+ * <p>Each is its own animal, {@link ForestBear}, built on the polar bear. Pandorical clients are
+ * told to stand a polar bear in for it, drawn by the polar bear's renderer and wearing the bear's
+ * own coat; vanilla clients are sent a polar bear outright, the right size because the size is the
+ * scale attribute every client reads. The type is registered at exactly the polar bear's size for
+ * the same reason: the client builds the stand-in from the polar bear's dimensions, and a hitbox
+ * the client did not agree with would be one the player keeps missing.
  */
 public final class Bears {
 	private Bears() {}
 
 	/**
-	 * @param tag     what the animal wears to say which bear it is
-	 * @param scale   against a polar bear, which is 1
-	 * The coat is drawn over the polar bear's own, from a sheet named for the tag: a cub has a model
-	 * of its own that lays its texture out differently, so it wears a cub sheet and not the adult's.
+	 * @param id    the type's path, and the name its coat and egg are filed under
+	 * @param scale against a polar bear, which is 1
+	 * @param name  what a client without this mod's names reads instead
 	 */
 	public enum Kind {
-		BLACK("black_bear", 0.8F),
-		BROWN("brown_bear", 1.25F);
+		BLACK("black_bear", 0.8F, "Black Bear"),
+		BROWN("brown_bear", 1.25F, "Brown Bear");
 
-		private final String tag;
+		private final String id;
 		private final float scale;
-		private final Identifier texture;
-		private final Identifier cubTexture;
+		private final String name;
 
-		Kind(String tag, float scale) {
-			this.tag = tag;
+		Kind(String id, float scale, String name) {
+			this.id = id;
 			this.scale = scale;
-			this.texture = Identifier.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/" + tag + ".png");
-			this.cubTexture = Identifier.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/" + tag + "_cub.png");
+			this.name = name;
 		}
 
-		public String tag() { return tag; }
+		public String id() { return id; }
 		public float scale() { return scale; }
-		public Identifier texture(boolean cub) { return cub ? cubTexture : texture; }
+		public String displayName() { return name; }
+
+		public EntityType<ForestBear> type() {
+			return switch (this) {
+				case BLACK -> BLACK_BEAR;
+				case BROWN -> BROWN_BEAR;
+			};
+		}
+
+		public Item egg() {
+			return switch (this) {
+				case BLACK -> BLACK_BEAR_SPAWN_EGG;
+				case BROWN -> BROWN_BEAR_SPAWN_EGG;
+			};
+		}
+
+		Identifier texture(boolean cub) {
+			return Identifier.fromNamespaceAndPath(Main.MOD_ID,
+				"textures/entity/" + id + (cub ? "_cub" : "") + ".png");
+		}
+	}
+
+	public static final EntityType<ForestBear> BLACK_BEAR = type(Kind.BLACK);
+	public static final EntityType<ForestBear> BROWN_BEAR = type(Kind.BROWN);
+
+	public static final Item BLACK_BEAR_SPAWN_EGG = egg(Kind.BLACK, BLACK_BEAR);
+	public static final Item BROWN_BEAR_SPAWN_EGG = egg(Kind.BROWN, BROWN_BEAR);
+
+	/**
+	 * The size goes in through the type's default attributes rather than at spawn, so every way a
+	 * bear can come into the world gets it: a natural spawn, an egg, a cub being born, and a
+	 * {@code /summon} that hands it data of its own.
+	 *
+	 * <p>The spawn rule is the ordinary animal one, grass and daylight. It is what a polar bear's
+	 * own rule falls back to anywhere outside the ice biomes, so a forest qualifies as it always
+	 * did; the polar bear's rule itself is written for the polar bear's type and nothing else.
+	 */
+	private static EntityType<ForestBear> type(Kind kind) {
+		return FabricEntityType.Builder.createMob(ForestBear::new, MobCategory.CREATURE, mob -> mob
+				.spawnPlacement(SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+					Animal::checkAnimalSpawnRules)
+				.defaultAttributes(() -> ForestBear.createAttributes(kind)))
+			// Everything else the polar bear's type says about itself, so the game treats the two
+			// alike wherever it asks the type rather than the class. The entity type tags that
+			// name the polar bear name these two as well, in data/minecraft/tags/entity_type.
+			.immuneTo(BlockTags.POLAR_BEAR_IMMUNE_TO)
+			.sized(EntityTypes.POLAR_BEAR.getWidth(), EntityTypes.POLAR_BEAR.getHeight())
+			.eyeHeight(EntityTypes.POLAR_BEAR.getDimensions().eyeHeight())
+			.clientTrackingRange(EntityTypes.POLAR_BEAR.clientTrackingRange())
+			.build(ResourceKey.create(Registries.ENTITY_TYPE, id(kind.id())));
+	}
+
+	private static Item egg(Kind kind, EntityType<ForestBear> type) {
+		return new SpawnEggItem(new Item.Properties()
+			.setId(ResourceKey.create(Registries.ITEM, id(kind.id() + "_spawn_egg")))
+			.spawnEgg(type));
+	}
+
+	private static Identifier id(String path) {
+		return Identifier.fromNamespaceAndPath(Main.MOD_ID, path);
+	}
+
+	public static void register() {
+		for (Kind kind : Kind.values()) {
+			Registry.register(BuiltInRegistries.ENTITY_TYPE, id(kind.id()), kind.type());
+			Identifier eggId = id(kind.id() + "_spawn_egg");
+			Registry.register(BuiltInRegistries.ITEM, eggId, kind.egg());
+
+			PandoricalApi.content().registerEntity(kind.type(), new EntityRegistration()
+				.base(EntityTypes.POLAR_BEAR)
+				.texture(kind.texture(false))
+				// A cub is drawn with a model of its own that lays its coat out on another sheet.
+				.babyTexture(kind.texture(true))
+				.vanillaFallback());
+			PandoricalApi.content().registerItem(eggId.toString(), new ItemRegistration());
+		}
+
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.SPAWN_EGGS).register(output -> {
+			output.accept(BLACK_BEAR_SPAWN_EGG);
+			output.accept(BROWN_BEAR_SPAWN_EGG);
+		});
 	}
 
 	/**
@@ -79,76 +164,8 @@ public final class Bears {
 	public static List<ResourceKey<Biome>> blackBiomes() { return List.copyOf(BLACK_BIOMES); }
 	public static List<ResourceKey<Biome>> brownBiomes() { return List.copyOf(BROWN_BIOMES); }
 
-	/** One id per kind, so re-applying replaces rather than stacks. */
-	private static Identifier scaleModifierId(Kind kind) {
-		return Identifier.fromNamespaceAndPath(Main.MOD_ID, "size_" + kind.tag());
-	}
-
 	/** Which bear this is, or null for a polar bear and for anything that is not a bear at all. */
 	public static @Nullable Kind of(Entity entity) {
-		if (!(entity instanceof PolarBear)) return null;
-		for (Kind kind : Kind.values()) {
-			if (entity.entityTags().contains(kind.tag())) return kind;
-		}
-		return null;
-	}
-
-	/** The bear this place makes, or null where the place makes polar bears or none at all. */
-	public static @Nullable Kind wildIn(LevelReader level, BlockPos pos) {
-		Holder<Biome> biome = level.getBiome(pos);
-		for (ResourceKey<Biome> key : BLACK_BIOMES) {
-			if (biome.is(key)) return Kind.BLACK;
-		}
-		for (ResourceKey<Biome> key : BROWN_BIOMES) {
-			if (biome.is(key)) return Kind.BROWN;
-		}
-		return null;
-	}
-
-	/**
-	 * Make this bear one of ours, once, at the moment it spawns.
-	 *
-	 * <p>Only ever called from a spawn, never from a chunk loading, because a polar bear that walks
-	 * south into a forest is a polar bear a long way from home and not a black bear. Where an
-	 * animal is born decides what it is; where it has got to since does not.
-	 */
-	public static void becomeWild(PolarBear bear, Kind kind) {
-		if (of(bear) != null) return;
-		bear.addTag(kind.tag());
-		applySize(bear, kind);
-		bear.setHealth(bear.getMaxHealth());
-	}
-
-	/**
-	 * The size, written into the animal's own attributes so it is saved with the animal.
-	 *
-	 * <p>Health rides on the size for the same reason a bigger animal is harder to kill, and
-	 * because a brown bear that was only visually larger would be a lie the first time one fought
-	 * back.
-	 */
-	private static void applySize(PolarBear bear, Kind kind) {
-		permanent(bear.getAttribute(Attributes.SCALE), kind, kind.scale() - 1F);
-		permanent(bear.getAttribute(Attributes.MAX_HEALTH), kind, kind.scale() - 1F);
-	}
-
-	private static void permanent(@Nullable AttributeInstance attribute, Kind kind, double amount) {
-		if (attribute == null) return;
-		attribute.removeModifier(scaleModifierId(kind));
-		attribute.addPermanentModifier(new AttributeModifier(
-			scaleModifierId(kind), amount, AttributeModifier.Operation.ADD_MULTIPLIED_BASE));
-	}
-
-	/**
-	 * Put the coat back on, every time the animal loads.
-	 *
-	 * <p>The size is saved with the animal and the coat is not: Pandorical holds overlays in memory
-	 * and drops them when an entity unloads, so this is the half that has to be said again. Cheap
-	 * enough to say for every bear that loads rather than tracking which ones have been told. Said
-	 * again when a cub grows up, too, because the grown bear is drawn with a different model.
-	 */
-	public static void dress(PolarBear bear) {
-		Kind kind = of(bear);
-		if (kind == null) return;
-		PandoricalApi.entityOverlays().set(bear, kind.texture(bear.isBaby()));
+		return entity instanceof ForestBear bear ? bear.kind() : null;
 	}
 }
