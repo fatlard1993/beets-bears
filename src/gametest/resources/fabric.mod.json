@@ -3,13 +3,14 @@
 	"id": "beets-bears-gametest",
 	"version": "1.0.0",
 	"name": "Beets Bears tests",
-	"description": "Loads the mod and joins a world, then holds both bears to what the readme says, and brings a 1.0.x bear back from its save.",
+	"description": "Loads the mod and joins a world, then holds both bears to what the readme says, brings a 1.0.x bear back from its save, and pictures the three bears side by side.",
 	"license": "MIT",
 	"environment": "*",
 	"entrypoints": {
 		"fabric-client-gametest": [
 			"justfatlard.beets_bears.gametest.SmokeTest",
-			"justfatlard.beets_bears.gametest.BearsAreTheirOwnAnimals"
+			"justfatlard.beets_bears.gametest.BearsAreTheirOwnAnimals",
+			"justfatlard.beets_bears.gametest.BearsPictured"
 		]
 	},
 	"depends": {

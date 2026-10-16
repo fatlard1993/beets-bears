@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate Beets Bears' mod menu icon: a bear's face, and the beetroot that wins it over.
 
-The face is cut from the mod's own brown bear texture. It is inset on forest green rather
+The face is cut from the mod's own brown bear texture, found through the model that lays it out. It is inset on forest green rather
 than filled to the edges: a head cropped flush is a brown square at listing size, and the
 ground is what gives the ears and muzzle an outline.
 
@@ -13,6 +13,7 @@ Usage: python3 generate_icon.py [path/to/minecraft.jar]
 """
 
 import glob
+import json
 import os
 import struct
 import sys
@@ -233,13 +234,34 @@ def fill(colour, size=16):
 
 
 FOREST = (46, 78, 42, 255)
-FACE = (8, 8, 6, 6)      # the head's front, on the entity sheet: left, top, width, height
+MODEL = "src/main/resources/assets/beets-bears-justfatlard/pandorical/entity_models/brown_bear.json"
+
+
+def front(cube):
+    """A cube's front face on the sheet, as left, top, width, height: the game's box layout puts it
+    one depth in from the cube's corner on both axes."""
+    u, v = cube["uv"]
+    w, h, d = (int(n) for n in cube["size"])
+    return u + d, v + d, w, h
+
+
+def face(bear):
+    """The brown bear's face as it is seen: the front of its head with the front of its muzzle laid
+    over it where the muzzle sits. Read from the model generate_textures.py wrote, so wherever that
+    puts the head on the sheet, this finds it. Drawn at twice size first, because the muzzle sits
+    half a pixel off the head's grid."""
+    with open(os.path.join(HERE, MODEL)) as f:
+        head, muzzle = json.load(f)["parts"]["head"]["cubes"][:2]
+    out = scale(crop(bear, *front(head)), 2)
+    left = round((muzzle["origin"][0] - head["origin"][0]) * 2)
+    top = round((muzzle["origin"][1] - head["origin"][1]) * 2)
+    return stamp(out, scale(crop(bear, *front(muzzle)), 2), left, top)
 
 
 def build_icon():
     sprite = fill(FOREST)
     bear = here("src/main/resources/assets/beets-bears-justfatlard/textures/entity/brown_bear.png")
-    stamp(sprite, sample(crop(bear, *FACE), 12, 12), 2, 1)
+    stamp(sprite, sample(face(bear), 12, 11), 2, 2)
     stamp(sprite, sample(vanilla("item/beetroot.png"), 7, 7), 9, 9)
     return scale(sprite, 8)
 

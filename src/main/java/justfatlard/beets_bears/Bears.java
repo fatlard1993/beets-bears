@@ -33,8 +33,8 @@ import org.jspecify.annotations.Nullable;
  * Pandorical draws them.
  *
  * <p>Each is its own animal, {@link ForestBear}, built on the polar bear. Pandorical clients are
- * told to stand a polar bear in for it, drawn by the polar bear's renderer and wearing the bear's
- * own coat; vanilla clients are sent a polar bear outright, the right size because the size is the
+ * told to stand a polar bear in for it, drawn by the polar bear's renderer with the bear's own body
+ * and coat; vanilla clients are sent a polar bear outright, the right size because the size is the
  * scale attribute every client reads. The type is registered at exactly the polar bear's size for
  * the same reason: the client builds the stand-in from the polar bear's dimensions, and a hitbox
  * the client did not agree with would be one the player keeps missing.
@@ -43,7 +43,7 @@ public final class Bears {
 	private Bears() {}
 
 	/**
-	 * @param id    the type's path, and the name its coat and egg are filed under
+	 * @param id    the type's path, and the name its body, coat and egg are filed under
 	 * @param scale against a polar bear, which is 1
 	 * @param name  what a client without this mod's names reads instead
 	 */
@@ -79,11 +79,18 @@ public final class Bears {
 			};
 		}
 
-		Identifier texture(boolean cub) {
-			return Identifier.fromNamespaceAndPath(Main.MOD_ID,
-				"textures/entity/" + id + (cub ? "_cub" : "") + ".png");
+		Identifier texture() {
+			return Identifier.fromNamespaceAndPath(Main.MOD_ID, "textures/entity/" + id + ".png");
+		}
+
+		/** Its body: {@code assets/<mod>/pandorical/entity_models/<id>.json}, written by generate_textures.py. */
+		Identifier model() {
+			return Identifier.fromNamespaceAndPath(Main.MOD_ID, id);
 		}
 	}
+
+	/** What the game scales the polar bear's model by as it builds it: MeshTransformer.scaling(1.2F). */
+	private static final float POLAR_MODEL_SCALE = 1.2F;
 
 	public static final EntityType<ForestBear> BLACK_BEAR = type(Kind.BLACK);
 	public static final EntityType<ForestBear> BROWN_BEAR = type(Kind.BROWN);
@@ -133,9 +140,14 @@ public final class Bears {
 
 			PandoricalApi.content().registerEntity(kind.type(), new EntityRegistration()
 				.base(EntityTypes.POLAR_BEAR)
-				.texture(kind.texture(false))
-				// A cub is drawn with a model of its own that lays its coat out on another sheet.
-				.babyTexture(kind.texture(true))
+				// A body of its own, animated by the polar bear's model class: the parts carry the
+				// polar bear's names and pivots, so it walks and stands up as a polar bear does.
+				.model(kind.model())
+				.texture(kind.texture())
+				// The polar bear's renderer draws its own model at 1.2 times its written size, and
+				// does nothing of the sort to geometry it is handed, so the body asks for it here.
+				// A cub is the same body at its age scale, wearing the same coat.
+				.drawScale(POLAR_MODEL_SCALE)
 				.vanillaFallback());
 			PandoricalApi.content().registerItem(eggId.toString(), new ItemRegistration());
 		}

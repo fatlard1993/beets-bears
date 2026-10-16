@@ -30,7 +30,7 @@ public class Main implements ModInitializer {
 		Spawns.register();
 		Calming.register();
 
-		// The two coats, the cubs' coats, the eggs' pictures and the names.
+		// The two bodies and their coats, the eggs' pictures and the names.
 		PandoricalApi.content().registerModAssets(MOD_ID);
 
 		ServerLivingEntityEvents.AFTER_DEATH.register((entity, source) -> {

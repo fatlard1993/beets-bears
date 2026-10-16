@@ -22,9 +22,11 @@ Size is not only for the look of it: a bear's health goes with its size, so the 
 
 ## Two New Animals, On The Polar Bear's Bones
 
-The black bear and the brown bear are animals of their own, `beets-bears-justfatlard:black_bear` and `beets-bears-justfatlard:brown_bear`, and underneath each one is the polar bear's own code. They stand on their hind legs, swim, panic in fire and raise cubs exactly as polar bears do, because that is the code they run. What they add is their size, their coat and their temper.
+The black bear and the brown bear are animals of their own, `beets-bears-justfatlard:black_bear` and `beets-bears-justfatlard:brown_bear`, and underneath each one is the polar bear's own code. They stand on their hind legs, swim, panic in fire and raise cubs exactly as polar bears do, because that is the code they run. What they add is their size, their shape and coat, and their temper.
 
-A client with Pandorical draws each one as a polar bear wearing the bear's own coat, with a cub's coat for a cub. A client without it is shown a plain polar bear in its place, at the right size, because the size is the game's own scale attribute and every client reads that.
+A client with Pandorical draws each one with a body and coat of its own. The black bear is the slighter animal: still heavy-set, but flat across the back, with tall ears and a long, straight muzzle in tan, which is the thing to look for across a clearing. The brown bear carries a hump over its shoulders that stands higher than its head, a broad face with a short muzzle, small round ears at the corners of its head, a coat that is dark on the legs and belly and pale along the back, and long pale claws on its front feet. Both walk and rear up exactly as a polar bear does, because it is the polar bear's own animation moving them. A cub is its parent drawn small.
+
+A client without it is shown a plain polar bear in its place, at the right size, because the size is the game's own scale attribute and every client reads that.
 
 A command that looks for polar bears no longer finds them; ask for the bear by its own name. Anything that changes what a polar bear drops still changes what they drop, because each bear's loot is the polar bear's loot.
 
@@ -68,9 +70,9 @@ They spawn by the ordinary animal rule, grass and daylight, which is the same ru
 
 ## Pandorical
 
-Pandorical is required on the server; the mod will not load without it. It is what tells a client to draw each new bear as a polar bear wearing that bear's coat, and what sends a polar bear in its place to a client that cannot draw it.
+Pandorical is required on the server; the mod will not load without it. It is what tells a client to draw each new bear with its own body and coat, and what sends a polar bear in its place to a client that cannot draw it.
 
-**Without Pandorical client-side**, a player still meets the bears, and they are still the right size, the right temper, carry the right drops and go by the right names. They are simply all white, because the client was never handed the coat. Nothing breaks; the bears are just harder to tell apart.
+**Without Pandorical client-side**, a player still meets the bears, and they are still the right size, the right temper, carry the right drops and go by the right names. They are simply all polar bears to look at, because the client was never handed the bodies or the coats. Nothing breaks; the bears are just harder to tell apart.
 
 ## Development
 

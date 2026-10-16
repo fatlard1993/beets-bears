@@ -1,0 +1,49 @@
+{
+	"texture": "beets-bears-justfatlard:textures/entity/brown_bear.png",
+	"texture_size": [128, 64],
+	"parts": {
+		"head": {
+			"pivot": [0, 10, -16],
+			"cubes": [
+				{"origin": [-4, -4, -3], "size": [8, 7, 7], "uv": [0, 0]},
+				{"origin": [-2.5, 0, -6], "size": [5, 3, 3], "uv": [112, 0]},
+				{"origin": [-4.5, -6, -2], "size": [3, 3, 1], "uv": [112, 6]},
+				{"origin": [1.5, -6, -2], "size": [3, 3, 1], "uv": [112, 6], "mirror": true}
+			]
+		},
+		"body": {
+			"pivot": [0, 9, 12],
+			"cubes": [
+				{"origin": [-6, -5, -17], "size": [12, 12, 17], "uv": [30, 0]},
+				{"origin": [-7, -4, -25], "size": [14, 12, 12], "uv": [0, 29]},
+				{"origin": [-7, -7, -24], "size": [14, 3, 8], "uv": [52, 33]}
+			]
+		},
+		"right_front_leg": {
+			"pivot": [-4, 14, -8],
+			"cubes": [
+				{"origin": [-2.5, 0, -3], "size": [5, 10, 6], "uv": [88, 17]},
+				{"origin": [-2.5, 9, -5], "size": [5, 1, 2], "uv": [112, 10]}
+			]
+		},
+		"left_front_leg": {
+			"pivot": [4, 14, -8],
+			"cubes": [
+				{"origin": [-2.5, 0, -3], "size": [5, 10, 6], "uv": [88, 17], "mirror": true},
+				{"origin": [-2.5, 9, -5], "size": [5, 1, 2], "uv": [112, 10], "mirror": true}
+			]
+		},
+		"right_hind_leg": {
+			"pivot": [-4.5, 14, 7],
+			"cubes": [
+				{"origin": [-2.5, 0, -3], "size": [5, 10, 7], "uv": [88, 0]}
+			]
+		},
+		"left_hind_leg": {
+			"pivot": [4.5, 14, 7],
+			"cubes": [
+				{"origin": [-2.5, 0, -3], "size": [5, 10, 7], "uv": [88, 0], "mirror": true}
+			]
+		}
+	}
+}
