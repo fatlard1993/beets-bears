@@ -3,6 +3,14 @@
 		"Black bears in the woods and brown bears in the conifers, built out of the polar bear the game already has. Hold out honey or a beetroot and a bear stops meaning you harm."
 	],
 	"versions": {
+		"1.1.0": [
+			"Black and brown bears are animals of their own now, each with its own spawn egg; the polar bear's egg hatches polar bears again.",
+			"Each bear has a body of its own: the black bear tall-eared with a tan muzzle, the brown bear with a shoulder hump, a grizzled back and long pale claws.",
+			"Cubs are drawn as small copies of their parents.",
+			"Bears from earlier versions become the new animals the next time they load, keeping their health, age, name, and whether they were settled or kept.",
+			"Players without Pandorical see a polar bear of the right size, called a Black Bear or Brown Bear.",
+			"Needs Pandorical 15.20 or newer."
+		],
 		"1.0.3": [
 			"Black and brown bear cubs wear a coat made for a cub, instead of the grown bear's drawn over the wrong shape.",
 			"A cub changes into the grown coat the moment it grows up.",
