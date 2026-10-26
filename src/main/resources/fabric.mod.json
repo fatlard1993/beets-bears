@@ -34,5 +34,12 @@
 		"better-companions-justfatlard": "*",
 		"lets-cook-justfatlard": "*",
 		"block-tip": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"links": {
+				"modmenu.donate": "https://github.com/sponsors/fatlard1993"
+			}
+		}
 	}
 }
