@@ -3,6 +3,9 @@
 		"Black bears in the woods and brown bears in the conifers, built out of the polar bear the game already has. Hold out honey or a beetroot and a bear stops meaning you harm."
 	],
 	"versions": {
+		"1.1.1": [
+			"Mod Menu's Donate button leads to sponsoring the author on GitHub. Nothing in play changes."
+		],
 		"1.1.0": [
 			"Black and brown bears are animals of their own now, each with its own spawn egg; the polar bear's egg hatches polar bears again.",
 			"Each bear has a body of its own: the black bear tall-eared with a tan muzzle, the brown bear with a shoulder hump, a grizzled back and long pale claws.",
