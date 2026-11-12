@@ -1,0 +1,72 @@
+{
+  "demo": {
+    "name": "Beets Bears",
+    "icon": "beets-bears-justfatlard:brown_bear_spawn_egg",
+    "about": [
+      "Black bears in the woods and bigger brown bears in the pines, and honey or a beetroot held out to any bear settles it.",
+      "Bears roam this wood. Walk up to one holding honey or a beetroot and right-click it to calm it; hit it and the deal is off."
+    ]
+  },
+  "pvp_preset": 1,
+  "needs": [
+    "beets-bears-justfatlard"
+  ],
+  "preset": {
+    "name": "Beets Bears",
+    "icon": "beets-bears-justfatlard:brown_bear_spawn_egg",
+    "pvp": false,
+    "game_mode": "survival",
+    "entry_kit": [
+      {
+        "slot": 0,
+        "item": {
+          "id": "minecraft:honey_bottle",
+          "count": 8
+        }
+      },
+      {
+        "slot": 1,
+        "item": {
+          "id": "minecraft:beetroot",
+          "count": 16
+        }
+      },
+      {
+        "slot": 2,
+        "item": {
+          "id": "minecraft:cooked_beef",
+          "count": 8
+        }
+      },
+      {
+        "slot": 40,
+        "item": {
+          "id": "minecraft:shield",
+          "count": 1
+        }
+      },
+      {
+        "slot": 38,
+        "item": {
+          "id": "minecraft:iron_chestplate",
+          "count": 1
+        }
+      }
+    ],
+    "respawn_kit": "entry",
+    "goal": "time",
+    "mobs": "always",
+    "mob_rarity": "normal",
+    "mob_default": "off",
+    "mob_levels": {
+      "beets-bears-justfatlard:black_bear": "normal",
+      "beets-bears-justfatlard:brown_bear": "normal"
+    },
+    "life": 15,
+    "size": 3,
+    "world": "overworld",
+    "shape": "natural",
+    "biome": "minecraft:forest",
+    "weather": "clear"
+  }
+}
