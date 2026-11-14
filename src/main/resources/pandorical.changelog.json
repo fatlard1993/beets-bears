@@ -3,6 +3,9 @@
 		"Black bears in the woods and brown bears in the conifers, built out of the polar bear the game already has. Hold out honey or a beetroot and a bear stops meaning you harm."
 	],
 	"versions": {
+		"1.1.3": [
+			"A demo to play in PvP Dimensions' onboarding."
+		],
 		"1.1.2": [
 			"Drop changelog notes for changes nothing in the game shows."
 		],
